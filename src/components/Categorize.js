@@ -48,6 +48,7 @@ const Categorize = () => {
 
   const [dashed, setDashed] = React.useState([]);
   const [image, setImage] = React.useState({});
+  const [contentName, setContentName] = React.useState("Untitled Quiz");
 
   const [dashedElement, setDashedElement] = React.useState([]);
   const [isEditor, setIsEditor] = React.useState(false);
@@ -55,7 +56,7 @@ const Categorize = () => {
   const [selectedText, setSelectedText] = React.useState("");
   const [inputText, setInputText] = React.useState("");
   const [previewText, setPreviewText] = React.useState("");
-  const [comprehensionText,setComprehensionText]=React.useState("");
+  const [comprehensionText, setComprehensionText] = React.useState("");
 
   const isActive = (el) => {
     return dashedElement.includes(el);
@@ -214,34 +215,54 @@ const Categorize = () => {
     setPreviewText(modifiedText);
   }, [inputText, dashedElement]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (tasks.length === 0) {
-      toast.error("Please add tasks");
-      return;
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      if (tasks.length === 0) {
+        toast.error("Please add tasks");
+        return;
+      }
+      if (dashed.length === 0) {
+        toast.error("Please add dashed items");
+        return;
+      }
+      if (compresensive.length === 0) {
+        toast.error("Please add comprehensive items");
+        return;
+      }
+
+      const body = {
+        contentName,
+        categorize: tasks.filter((task) => task.content !== ""), //filtering empty task
+        taskItems: items,
+        cloze: dashed,
+        clozeText: inputText,
+        Comprehension: compresensive,
+        comprehensionText: comprehensionText,
+      };
+
+      await fetch("/api/content", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+
+      console.log("submitted", body);
+      toast.success("Submitted successfully");
+    } catch (error) {
+      console.log("error in Submitting data", error);
     }
-    if (dashed.length === 0) {
-      toast.error("Please add dashed items");
-      return;
-    }
-    if (compresensive.length === 0) {
-      toast.error("Please add comprehensive items");
-      return;
-    }
-    const body = {
-      categorize: tasks.filter((task) => task.content!==""), //filtering empty task
-      taskItems:items,
-      cloze: dashed,
-      clozeText: inputText,
-      Comprehension: compresensive,
-      comprehensionText:comprehensionText
-    };
-    console.log("submitted", body);
-    toast.success("Submitted successfully");
   };
 
   return (
     <div className=" px-20 h-full flex flex-col gap-10  ">
+      <input
+        value={contentName}
+        onChange={(e) => setContentName(e.target.value)}
+        className=" w-96 border-b-0 border-black"
+      />
       <div className="border-[0.6px] border-gray-300 flex gap-0  rounded-md h-full">
         {/* <div className=" w-5 h-[100%] bg-sky-300 empty-div border-l-4 border-sky-400"></div> */}
         <div className="p-4 flex flex-col gap-4">
@@ -375,7 +396,11 @@ const Categorize = () => {
           </DndContext>
         </div>
       </div>
-      <Comprehensive data={compresensive} setData={setComprehensive} setComprehensionText={setComprehensionText} />
+      <Comprehensive
+        data={compresensive}
+        setData={setComprehensive}
+        setComprehensionText={setComprehensionText}
+      />
 
       <button
         type="submit"
