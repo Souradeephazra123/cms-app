@@ -76,9 +76,9 @@ const RenderedUI = ({ data }) => {
   };
 
   return (
-    <>
+    <div className=" w-full">
       {!modal ? (
-        <div className="flex flex-col gap-6 justify-center items-center">
+        <div className="flex flex-col gap-6 justify-center items-center min-w-full">
           <p className="  text-2xl font-bold">{data.contentName}</p>
           <div className=" shadow-lg p-5 rounded-lg bg-white w-[60%]">
             <p>Question 1</p>
@@ -226,7 +226,7 @@ const RenderedUI = ({ data }) => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -9,7 +9,7 @@ const page = async ({ params }) => {
   const content = await getContentById(id);
 
   return (
-    <div className=" pl-10">
+    <div className=" w-full ">
       <RenderedUI data={content} />
     </div>
   );

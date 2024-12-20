@@ -17,10 +17,13 @@ import { CiImageOn } from "react-icons/ci";
 import Image from "next/image";
 import { GrUnderline } from "react-icons/gr";
 import Comprehensive from "./Comprehensive";
+import { useRouter } from "next/navigation";
 // import ReactQuill from "react-quill";
 // import "react-quill/dist/quill.snow.css";
 
 const Categorize = () => {
+
+  const router=useRouter();
   // const { setValue, handleSubmit, control, formState, trigger, watch } =
   //   useForm({ mode: "onChange" });
 
@@ -251,6 +254,7 @@ const Categorize = () => {
 
       console.log("submitted", body);
       toast.success("Submitted successfully");
+      router.push("/content");
     } catch (error) {
       console.log("error in Submitting data", error);
     }
