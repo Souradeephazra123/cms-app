@@ -62,7 +62,7 @@ const ComprehensiveForm = ({ setOpenForm, setData }) => {
   );
 };
 
-const Comprehensive = ({ data, setData }) => {
+const Comprehensive = ({ data, setData,setComprehensionText }) => {
   const [openForm, setOpenForm] = React.useState(false);
   return (
     <div className="border-[0.6px] border-gray-300 flex gap-0  rounded-md h-full w-[100%]">
@@ -71,6 +71,7 @@ const Comprehensive = ({ data, setData }) => {
         <textarea
           className="border border-black p-2 rounded-md w-[70%] h-[70vh] "
           placeholder="Enter your comprehensive story here"
+          onChange={(e) => setComprehensionText(e.target.value)}
         />
 
         {data?.length === 0 && (
