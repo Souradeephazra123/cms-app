@@ -13,7 +13,7 @@ export async function connectToDB() {
     return;
   }
   try {
-    await mongoose.connect(connectionString);
+    await mongoose.connect(connectionString,{connectTimeoutMS: 30000,});
     console.log("Successfully connected to the database.");
   } catch (error) {
     if (error.name === "MongoNetworkError") {
